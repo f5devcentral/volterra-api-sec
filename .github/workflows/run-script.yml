@@ -1,0 +1,16 @@
+name: Cloud Formation Template Deployment in Azure
+on:
+  push: {branches: master}
+jobs:
+  Create-https-LB-Volterra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: Install Dependencies
+        run: |
+          python -m pip install beautifulsoup4
+          python -m pip install requests
+      - name:  Verify the LB status with service policy
+        run: |
+          python /home/runner/work/volterra-api-sec/volterra-api-sec/test_url.py

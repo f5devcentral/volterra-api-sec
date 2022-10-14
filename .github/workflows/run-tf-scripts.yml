@@ -1,0 +1,40 @@
+name: Volterra API Security Testing
+on:
+  push: {branches: main}
+jobs:
+  Create-https-LB-Volterra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: hashicorp/setup-terraform@v2
+      - name: Install Dependencies
+        run: |
+          python -m pip install beautifulsoup4
+          python -m pip install requests        
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply --auto-approve      
+      - name:  Verify the LB status with service policy
+        env:
+          LBDomainName: ${{secrets.domain_name}}
+          PATH1: ${{secrets.policyPath1}}
+          PATH2: ${{secrets.policyPath2}}
+        run: |
+          python /home/runner/work/volterra-api-sec/volterra-api-sec/tests.py      
+      - name: Terraform destroy
+        id: destroy
+        run: |
+          terraform destroy -target ${{secrets.RESOURCE_LB_NAME}} --auto-approve
+          terraform destroy --auto-approve        
+        continue-on-error: true
+

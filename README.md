@@ -14,4 +14,7 @@ This Repo will give you the detailed information on how to automate the testing 
     POLICYPATH1
     POLICYPATH2
     RESOURCE_LB_NAME
+  * Go to actions --> workflows --> Volterra API Security Testing --> Run Workflow
+  * Note: Currently we have deployed an application(petstore) into one of the aws instance which is opensource to test the functionality.
+          As the application is going to be vary from customer to customer this piece of deployment is not automated.
     
